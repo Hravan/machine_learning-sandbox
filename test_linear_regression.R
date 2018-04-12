@@ -1,4 +1,5 @@
 library(testthat)
+library(purrr)
 
 source('./linear_regression.R')
 
@@ -6,11 +7,13 @@ source('./linear_regression.R')
 
 context('Hypothesis')
 
-# Test settings
-matr <- matrix(c(1, 2, 3, 4), nrow = 2, byrow = T)
-matr2 <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2, byrow = T)
+
 
 test_that('Hypothesis function for linear regression returns correct values', {
+  # Test settings
+  matr <- matrix(c(1, 2, 3, 4), nrow = 2, byrow = T)
+  matr2 <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2, byrow = T)
+  
   expect_equal(hypothesis(c(0, 0, 0), matr),
                as.vector(matrix(c(0, 0), nrow = 1)))
   
@@ -132,4 +135,65 @@ test_that('Derivatives are computed properly for two independent variables case'
   }
   
   expect_equal(drvs, derivatives(theta, X, y))
+})
+
+
+# 5. Gradient descent
+
+context('Gradient descent')
+
+test_that('Gradient descent and cost are computed properly for one independent variable', {
+  
+  theta <- c(0, 0)
+  X <- matrix(c(1, 2, 3), nrow = 3)
+  y <- c(5, 4, 2)
+  iter <- 2
+  cost_vals <- numeric(iter)
+  m <- nrow(X)
+  alpha <- 0.01
+  
+  for (i in 1:iter) {
+    cost_vals[i] <- cost(theta, X, y)
+    theta <- theta - alpha / m * derivatives(theta, X, y)
+  }
+  
+  expect_equal(gradient_descent(c(0, 0), X, y, alpha, iter),
+               list(theta = theta, cost_vals = cost_vals))
+})
+
+test_that('Gradient descent and cost are computed properly for two independent variables', {
+  
+  theta <- c(0, 0, 0)
+  X <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 3)
+  y <- c(5, 4, 2)
+  iter <- 5
+  cost_vals <- numeric(iter)
+  m <- nrow(X)
+  alpha <- 0.01
+  
+  for (i in 1:iter) {
+    cost_vals[i] <- cost(theta, X, y)
+    theta <- theta - (alpha / m) * derivatives(theta, X, y)
+  }
+  
+  expect_equal(gradient_descent(c(0, 0, 0), X, y, alpha, iter),
+               list(theta = theta, cost_vals = cost_vals))
+})
+
+
+context('Feature scaling - standarization')
+
+test_that('Two features are standarized properly' {
+  X <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 3)
+  sds <- apply(X, 2, sd)
+  means <- apply(X, 2, mean)
+  normalized_X <- X
+  
+  for (i in 1:ncol(X)) {
+    normalized_X[, i] <- (X[, i] - means[i]) / sds[i]
+  }
+})
+
+test_that('Three features are standarized properly' {
+  
 })

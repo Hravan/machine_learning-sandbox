@@ -53,13 +53,12 @@ gradient_descent <- function(theta, X, y, alpha, num_iters) {
   
   # list(theta = c(0, 0), cost_vals = c(0, 0, 0))
   m <- nrow(X)
-  X_ones <- cbind(1, X)
   cost_vals <- numeric(num_iters)
+  coeff <- alpha / m
   
   for (i in 1:num_iters) {
-    r <- res(theta, X, y)
-    theta <- theta - alpha / m * as.vector((t(X_ones) %*% r))
     cost_vals[i] <- cost(theta, X, y)
+    theta <- theta - coeff * derivatives(theta, X, y)
   }
   
   list(theta = theta, cost_vals = cost_vals)
@@ -94,4 +93,18 @@ derivatives <- function(theta, X, y) {
   
   r <- matrix(res(theta, X, y), nrow = 1)
   as.vector(t(X_ones) %*% t(r))
+}
+
+standarize_features <- function(X) {
+  # Standarizes features.
+  #
+  # Args:
+  #   X: matrix of features to standarize
+  #
+  # Returns:
+  #   List of:
+  #     1. doubles - standarized features.
+  #     2. doubles - parameters used for standarization (mean and standard deviation).
+  
+  list(norm_feat = c(0), params = c(0, 0))
 }
