@@ -105,6 +105,12 @@ standarize_features <- function(X) {
   #   List of:
   #     1. doubles - standarized features.
   #     2. doubles - parameters used for standarization (mean and standard deviation).
+  means <- apply(X, 2, mean)
+  stds <- apply(X, 2, sd)
   
-  list(norm_feat = c(0), params = c(0, 0))
+  for (i in 1:ncol(X)) {
+    X[, i] <- (X[, i] - means[i]) / stds[i]
+  }
+  
+  list(stand_feats = X, means = means, stds = stds)
 }

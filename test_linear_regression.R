@@ -183,17 +183,34 @@ test_that('Gradient descent and cost are computed properly for two independent v
 
 context('Feature scaling - standarization')
 
-test_that('Two features are standarized properly' {
-  X <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 3)
+test_that('Two features are standarized properly', {
+  X <- matrix(c(100, 250, 37, 2, 8, 6), nrow = 3)
   sds <- apply(X, 2, sd)
   means <- apply(X, 2, mean)
-  normalized_X <- X
+  standarized_X <- X
   
   for (i in 1:ncol(X)) {
-    normalized_X[, i] <- (X[, i] - means[i]) / sds[i]
+    standarized_X[, i] <- (X[, i] - means[i]) / sds[i]
   }
+  
+  result <- list(stand_feats = standarized_X, means = means, stds = sds)
+  
+  expect_equal(standarize_features(X),
+               result)
 })
 
-test_that('Three features are standarized properly' {
+test_that('Three features are standarized properly', {
+  X <- matrix(c(700, 200, 100, 150, 30, 400, 5, 6, 2), nrow = 3)
+  sds <- apply(X, 2, sd)
+  means <- apply(X, 2, mean)
+  standarized_X <- X
   
+  for (i in 1:ncol(X)) {
+    standarized_X[, i] <- (X[, i] - means[i]) / sds[i]
+  }
+  
+  result <- list(stand_feats = standarized_X, means = means, stds = sds)
+  
+  expect_equal(standarize_features(X),
+               result)
 })
