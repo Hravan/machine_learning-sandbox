@@ -12,13 +12,53 @@ sigmoid <- function(z) {
 }
 
 hypothesis <- function(theta, X) {
-  # Computes hypothesis function for logistic regression
+  # Computes a value of hypothesis function for logistic regression.
   #
   # Args:
-  #   theta: vector of double
-  #   X: matrix of observations (with ones added)
+  #   theta: vector of coefficients
+  #   X: matrix of independent variables (with ones added)
   #
   # Returns:
   #   Vector of values of hypothesis for all Xes.
-  as.vector(t(theta) %*% t(X))
+  as.vector(sigmoid(t(theta) %*% t(X)))
+}
+
+cost_success <- function(theta, X) {
+  # Computes cost for given values of theta and observations, given that the output of
+  # classification should be 1.
+  #
+  # Args:
+  #   theta: vector of coefficients
+  #   X:     matrix of independent variables
+  #
+  # Returns:
+  #   double representing the cost of using given parameters for the input of sigmoid function.
+  -log(hypothesis(theta, X))
+}
+
+cost_failure <- function(theta, X) {
+  # Computes cost for given values of theta and observations, given that the output of
+  # classification should be 0.
+  #
+  # Args:
+  #   theta: vector of coefficients
+  #   X:     matrix of independent variables
+  #
+  # Returns:
+  #   double representing the cost of using given parameters for the input of sigmoid function.
+  
+  -log(1 - hypothesis(theta, X))
+}
+
+cost <- function(theta, X, y) {
+  # Wrapper over cost_success and cost_failure.
+  #
+  # Args:
+  #   theta: vector of coefficients
+  #   X:     matrix of independent variables
+  #   y:     vector of expected successes and failures
+  #
+  # Returns:
+  #   Cost of logistic regression function for given value of theta.
+  0
 }
