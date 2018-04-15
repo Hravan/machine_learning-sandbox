@@ -60,5 +60,5 @@ cost <- function(theta, X, y) {
   #
   # Returns:
   #   Cost of logistic regression function for given value of theta.
-  0
+  1 / nrow(X) * sum(t(y) %*% cost_success(theta, X) + t(1 - y) %*% cost_failure(theta, X))
 }

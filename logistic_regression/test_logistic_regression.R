@@ -119,6 +119,72 @@ test_that('Cost is between 0 and Inf', {
                cost_failure(th, X))
 })
 
+
+context('Cost function - wrapper over separate functions for successes and failures')
+
+test_that('Only positive cases are computed properly', {
+  y <- c(1, 1)
+  
+  X <- matrix(c(1, 20, 1, 19), nrow = 2, byrow = T)
+  th <- c(0, 1)
+  costt <- 1 / nrow(X) * sum(-log(hypothesis(th, X)))
+  
+  expect_equal(costt,
+               cost(th, X, y))
+  
+  X <- matrix(c(1, -8, 1, -10), nrow = 2, byrow = T)
+  th <- c(0, 1)
+  costt <- 1 / nrow(X) * sum(-log(hypothesis(th, X)))
+  
+  expect_equal(costt,
+               cost(th, X, y))
+  
+  X <- matrix(c(1, -8, 1, -10), nrow = 2, byrow = T)
+  th <- c(0, 0)
+  costt <- 1 / nrow(X) * sum(-log(hypothesis(th, X)))
+  
+  expect_equal(costt,
+               cost(th, X, y))
+})
+
+test_that('Only negative cases are computed properly', {
+  y <- c(0, 0)
+  
+  X <- matrix(c(1, -10, 1, -7), nrow = 2, byrow = T)
+  th <- c(0, 1)
+  costt <- 1 / nrow(X) * sum(-log(1 - hypothesis(th, X)))
+  
+  expect_equal(costt,
+               cost(th, X, y))
+  
+  X <- matrix(c(1, 20, 1, 19), nrow = 2, byrow = T)
+  th <- c(0, 1)
+  costt <- 1 / nrow(X) * sum(-log(1 - hypothesis(th, X)))
+  
+  expect_equal(costt,
+               cost(th, X, y))
+  
+  X <- matrix(c(1, -3, 1, -0.5), nrow = 2, byrow = T)
+  th <- c(0, 1)
+  costt <- 1 / nrow(X) * sum(-log(1 - hypothesis(th, X)))
+  
+  expect_equal(costt,
+               cost(th, X, y))
+})
+
+test_that('Mixed cases are computed properly', {
+  y <- c(1, 1, 0, 0)
+  X <- matrix(c(19, -20, 20, -20), nrow = 4)
+  X <- cbind(1, X)
+  th <- c(1, 1)
+  
+  expected <- 1 / nrow(X) * sum(-t(y) %*% log(hypothesis(th, X)) - t(1 - y) %*% log(1 - hypothesis(th, X)))
+  
+  expect_equal(expected,
+               cost(th, X, y))
+})
+
+
 # test_that('Cost function returns cost between 0 and Inf', {
 #   X <- matrix(c(2, 0.4), nrow = 2)
 #   X <- cbind(1, X)
