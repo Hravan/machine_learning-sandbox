@@ -8,5 +8,5 @@ eval_lin_mod <- function(X, model) {
   #
   # Returns:
   #   vector of predicted values, one for each observation in X
-  0
+  as.vector(X %*% model)
 }
