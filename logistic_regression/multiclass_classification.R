@@ -15,7 +15,7 @@ multiclass_classification <- function(X, y) {
   multiclass_models <- multiclass_gradient_descent(X, y) # !!!
   
   
-  function(new_obs) {
+  function(new_obs, models) {
     multi_classify(new_obs) # !!!
   }
 }
