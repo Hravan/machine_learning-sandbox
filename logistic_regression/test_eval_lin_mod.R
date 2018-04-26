@@ -64,18 +64,26 @@ test_that('Predicted values are computed properly for many linear models', {
   expect_equal(eval_lin_mod(X, m1),
                result)
   
-  m2 <- c(2, 3, 4, 5)
+  m2 <- matrix(c(2, 3, 4, 5,
+                 6, 7, 8, 9),
+               nrow = 4)
+  
   X <- matrix(c(2, 3, 1,
                 4, 5, 6,
                 7, 8, 9),
               nrow = 3,
               byrow = T)
+  
   X <- cbind(1, X)
   
   result <- matrix(c(2 + 3 * 2 + 4 * 3 + 5 * 1,
                      2 + 3 * 4 + 4 * 5 + 5 * 6,
-                     2 + 3 * 7 + 4 * 8 + 5 * 9),
-                   nrow = 1)
+                     2 + 3 * 7 + 4 * 8 + 5 * 9,
+                     6 + 7 * 2 + 8 * 3 + 9 * 1,
+                     6 + 7 * 4 + 8 * 5 + 9 * 6,
+                     6 + 7 * 7 + 8 * 8 + 9 * 9),
+                   nrow = 2,
+                   byrow = T)
   
   expect_equal(eval_lin_mod(X, m2),
                result)

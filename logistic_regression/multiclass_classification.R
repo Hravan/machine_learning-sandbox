@@ -8,15 +8,17 @@ multiclass_classification <- function(X, y) {
   # Returns:
   #   function that given a new observation classifies it to one of groups specified in y
   
+  categories <- unique(y)
+  
   # make length(unique(y)) copies of data
-  multiclass_X <- multiclass_replicate(X, y) # !!!
+  multiclass_X <- multiclass_replicate(y) # !!!
   
   # create length(unique(y)) models of logistic regression
   multiclass_models <- multiclass_gradient_descent(X, y) # !!!
   
   
   function(new_obs, models) {
-    multi_classify(new_obs) # !!!
+    categories[multi_classify(new_obs, models)]
   }
 }
 
