@@ -1,4 +1,5 @@
 source('./logistic_regression.R')
+source('./eval_lin_mod.R')
 
 multi_classify <- function(X, models) {
   # Compute probability of X belonging to 

@@ -1,9 +1,14 @@
-multiclass_classification <- function(X, y) {
+source('./multiclass_replicate.R')
+source('./multiclass_gradient_descent.R')
+source('./multi_classify.R')
+
+multiclass_classification <- function(X, y, alpha) {
   # Perform multiclass clasification One-vs-all algorithm
   #
   # Args:
-  #   X: m X n matrix of m observations of n independent variables
-  #   y: vector of m observations of the dependent variable
+  #   X:     m X n matrix of m observations of n independent variables
+  #   y:     vector of m observations of the dependent variable
+  #   alpha: learning rate
   #
   # Returns:
   #   function that given a new observation classifies it to one of groups specified in y
@@ -11,14 +16,14 @@ multiclass_classification <- function(X, y) {
   categories <- unique(y)
   
   # make length(unique(y)) copies of data
-  multiclass_X <- multiclass_replicate(y) # !!!
+  multiclass_y <- multiclass_replicate(y)
   
   # create length(unique(y)) models of logistic regression
-  multiclass_models <- multiclass_gradient_descent(X, y) # !!!
+  multiclass_models <- multiclass_gradient_descent(X, multiclass_y, alpha)
   
   
-  function(new_obs, models) {
-    categories[multi_classify(new_obs, models)]
+  function(new_obs) {
+    categories[multi_classify(new_obs, multiclass_models)]
   }
 }
 
